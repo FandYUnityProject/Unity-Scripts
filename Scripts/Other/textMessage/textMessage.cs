@@ -4,6 +4,7 @@
  * "S"キーでメッセージを全表示→スキップ
  * 画面サイズに応じてメッセージの高さ座標を変更する必要が有る
  * (未実装)現在のストーリーの進行具合や話す回数に応じてメッセージを変える
+ * (未実装)メッセージスピードをフラグ（Slow, Normal, High)で管理する
  * <!> 3つの画像(Texture 2D)をInspector画面のMsgWindowで設定する必要がある <!> 
  * 2015/07/30 Thu - Guttyon
 */
@@ -27,14 +28,15 @@ public class textMessage : MonoBehaviour {
 	private string text;					// 表示したいメッセージ
 	public  static int    textLength;		// 表示したい文字列の長さ
 	public  static bool   isTalk = false;	// トーク開始フラグ
-	public  static float  waitMessage = 0;	// 文字表示時間
+	public  static float  waitMessage;		// 文字表示時間
+	public  float messageSpeed = 0.005f;	// メッセージスピード(MAX...0,01f)
 
 	private float  nextStringWaitTime = 0.1f;	// 次の文字の待ち時間
 	
 	// 外部からもアクセス可能にする
 	public static string dispCharaName;
 	public static string dispMessage;
-	
+
 	public static void dispMsg (string charaName = "???", string Message = "No Message"){
 
 		dispCharaName = "  " + charaName;
@@ -46,9 +48,14 @@ public class textMessage : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+
+		if( messageSpeed >= 0.01f ){
+			messageSpeed = 0.01f;
+		}
+
 		// 半角74文字,5行
-		dispMsg ("Nanashi"
-		         , "半角74文字,5行まで。123456789012345678901234567890123456789012345678901234\n12345678901234567890123456789012345678901234567890123456789012345678901234\n12345678901234567890123456789012345678901234567890123456789012345678901234\n12345678901234567890123456789012345678901234567890123456789012345678901234\n12345678901234567890123456789012345678901234567890123456789012345678901234\n");
+		// dispMsg ("Nanashi"
+		//         , "半角74文字,5行まで。123456789012345678901234567890123456789012345678901234\n12345678901234567890123456789012345678901234567890123456789012345678901234\n12345678901234567890123456789012345678901234567890123456789012345678901234\n12345678901234567890123456789012345678901234567890123456789012345678901234\n12345678901234567890123456789012345678901234567890123456789012345678901234\n");
 	}
 	
 	// Update is called once per frame
@@ -74,7 +81,7 @@ public class textMessage : MonoBehaviour {
 				if (textLength < dispMessage.Length) {
 					textLength++;
 				}
-				nextStringWaitTime = Time.time + 0.01f;
+				nextStringWaitTime = Time.time + messageSpeed;
 			}
 
 			// メッセージを全て表示した後

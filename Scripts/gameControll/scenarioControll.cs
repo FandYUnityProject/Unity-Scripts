@@ -8,6 +8,8 @@ using System.Collections;
 
 public class scenarioControll : MonoBehaviour {
 
+	public int mainScenarioNumber_Public = 0; // Debug用
+
 	public static int mainScenarioNumber = 0; // 現在のメインシナリオ番号
 
 	public int kindOfSubScenario  = 0; // サブシナリオの種類の数
@@ -18,6 +20,9 @@ public class scenarioControll : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		// Debug用
+		mainScenarioNumber = mainScenarioNumber_Public;
 
 		// 初期化
 		allSubScenario = new bool[kindOfSubScenario, subScenarioNumber];
